@@ -4,99 +4,32 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FashionRUs – Produkter</title>
+    <title>FashionRUs — Products</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
     <header class="site-header">
-        <a class="logo" href="index.html">Fashion<span class="r">R</span>Us</a>
-        <nav class="main-nav">
+        <a class="logo" href="index.html">
+            <span>Fashion</span><span class="accent">RUs</span>
+        </a>
+        <nav class="top-nav">
             <a href="index.html">Categories</a>
-            <a href="#">Brands</a>
-            <a href="#">Seasons</a>
+            <a href="productlist.html">Brands</a>
+            <a href="productlist.html?season=all">Seasons</a>
         </nav>
     </header>
 
     <main class="container">
-        <h1>Nike</h1>
-
-        <ul class="product_list_container">
-            <!-- 1: standard -->
-            <li class="product-card">
-                <a class="product-link" href="product.html">
-                    <div class="product-media">
-                        <img src="https://kea-alt-del.dk/t7/images/webp/640/1573.webp"
-                            alt="Sahara Team India Fanwear Round Neck Jersey">
-                    </div>
-                    <h3 class="product-title">Sahara Team India Fanwear Round Neck Jersey</h3>
-                    <p class="product-meta">Tshirts | Nike</p>
-                    <div class="price">
-                        <span class="price-current">DKK 1595,-</span>
-                    </div>
-                    <span class="cta">Read More</span>
-                </a>
-            </li>
-
-            <!-- 2: nedsat -->
-            <li class="product-card nedsat">
-                <a class="product-link" href="product.html">
-                    <div class="product-media">
-                        <span class="badge sale">-34%</span>
-                        <img src="https://kea-alt-del.dk/t7/images/webp/640/1570.webp"
-                            alt="Blue T20 Indian Cricket Jersey">
-                    </div>
-                    <h3 class="product-title">Blue T20 Indian Cricket Jersey</h3>
-                    <p class="product-meta">Tshirts | Nike</p>
-                    <div class="price">
-                        <span class="price-old">DKK 1950,-</span>
-                        <span class="price-current">Now DKK 1560,-</span>
-                    </div>
-                    <span class="cta">Read More</span>
-                </a>
-            </li>
-
-            <!-- 3: udsolgt -->
-            <li class="product-card udsolgt">
-                <a class="product-link" href="product.html">
-                    <div class="product-media">
-
-                        <img src="https://kea-alt-del.dk/t7/images/webp/640/1163.webp" alt="Women's cardigan">
-                    </div>
-                    <h3 class="product-title">Lightweight Cardigan</h3>
-                    <p class="product-meta">Tshirts | Nike</p>
-                    <div class="price">
-                        <span class="price-current">DKK 1595,-</span>
-                    </div>
-                    <span class="cta">Read More</span>
-                </a>
-            </li>
-
-            <!-- 4: udsolgt + nedsat -->
-            <li class="product-card udsolgt nedsat">
-                <a class="product-link" href="product.html">
-                    <div class="product-media">
-
-                        <span class="badge sale">-34%</span>
-                        <img src="https://kea-alt-del.dk/t7/images/webp/640/1580.webp" alt="Puma backpack">
-                    </div>
-                    <h3 class="product-title">Blue T20 Indian Cricket Jersey</h3>
-                    <p class="product-meta">Tshirts | Nike</p>
-                    <div class="price">
-                        <span class="price-old">DKK 1950,-</span>
-                        <span class="price-current">Now DKK 1560,-</span>
-                    </div>
-                    <span class="cta">Read More</span>
-                </a>
-            </li>
-
-            <!-- (Dupliker de fire over for at simulere flere produkter) -->
-        </ul>
+        <h2 id="listTitle">Products</h2>
+        <section id="productlist" class="product-grid" aria-live="polite"></section>
     </main>
 
     <footer class="site-footer">
         <small>© 2025 FashionRUs – statisk prototype</small>
     </footer>
+
+    <script src="productlist.js" defer></script>
 </body>
 
 </html>

@@ -4,75 +4,31 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FashionRUs – Produkt</title>
+    <title>FashionRUs — Product</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
     <header class="site-header">
-        <a class="logo" href="index.html">Fashion<span class="r">R</span>Us</a>
-        <nav class="main-nav">
+        <a class="logo" href="index.html">
+            <span>Fashion</span><span class="accent">RUs</span>
+        </a>
+        <nav class="top-nav">
             <a href="index.html">Categories</a>
-            <a href="#">Brands</a>
-            <a href="#">Seasons</a>
+            <a href="productlist.html">Brands</a>
+            <a href="productlist.html?season=all">Seasons</a>
         </nav>
     </header>
 
     <main class="container">
-        <nav class="breadcrumbs">
-            <a href="#">Home</a> › <a href="#">Brands</a> › <a href="#">Nike</a> › Sahara Team India Fanwear Round Neck
-            Jersey
-        </nav>
-
-        <article class="product-detail">
-            <div class="gallery">
-                <div class="media-main">
-                    <img src="https://kea-alt-del.dk/t7/images/webp/1000/1573.webp"
-                        alt="Sahara Team India Fanwear Round Neck Jersey">
-                </div>
-                <div class="thumbs">
-                    <img src="https://kea-alt-del.dk/t7/images/webp/640/1570.webp" alt="">
-                    <img src="https://kea-alt-del.dk/t7/images/webp/640/1571.webp" alt="">
-                    <img src="https://kea-alt-del.dk/t7/images/webp/640/1580.webp" alt="">
-                </div>
-            </div>
-
-            <section class="detail-info">
-                <h1>Product Information</h1>
-                <dl class="specs">
-                    <dt>Model name</dt>
-                    <dd>Sahara Team India Fanwear Round Neck Jersey</dd>
-                    <dt>Color</dt>
-                    <dd>Blue</dd>
-                    <dt>Inventory number</dt>
-                    <dd>1163</dd>
-                </dl>
-
-                <h2 class="brand-head">Nike</h2>
-                <p class="muted">Nike, creating experiences for today’s athlete</p>
-            </section>
-
-            <aside class="sidebar">
-                <h3 class="pname">Sahara Team India<br>Fanwear Round Neck<br>Jersey</h3>
-                <p class="product-meta">Nike | Tshirts</p>
-
-                <label class="size-label">Choose a size
-                    <select>
-                        <option>S</option>
-                        <option>M</option>
-                        <option>L</option>
-                        <option>XL</option>
-                    </select>
-                </label>
-
-                <button class="btn primary">Add to basket</button>
-            </aside>
-        </article>
+        <section id="productDetail" class="product-detail" aria-live="polite"></section>
     </main>
 
     <footer class="site-footer">
         <small>© 2025 FashionRUs – statisk prototype</small>
     </footer>
+
+    <script src="product.js" defer></script>
 </body>
 
 </html>

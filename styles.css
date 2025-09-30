@@ -317,3 +317,171 @@ select {
   padding: 4px 8px;
   border-radius: 3px;
 }
+/* === Dynamiske kategorier === */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.categories-grid a,               /* rammer uanset klasse */
+.categories-grid .category-tile,  /* hvis JS sætter denne */
+.categories-grid .category-button /* hvis du brugte den gamle klasse */ {
+  display: block;
+  background: #8d8d8d;
+  color: #fff;
+  text-decoration: none;
+  padding: 16px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.categories-grid a:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+.top-nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #222;
+}
+.top-nav a:hover {
+  text-decoration: underline;
+}
+:root {
+  --gap: 16px;
+  --tile: #8d8d8d;
+  --text: #222;
+}
+
+/* Header + logo */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  padding: 24px;
+}
+.logo {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  color: var(--text);
+  text-decoration: none; /* ingen understregning */
+}
+.logo .accent {
+  color: #d22;
+}
+.top-nav {
+  display: flex;
+  gap: 16px;
+}
+.top-nav a {
+  text-decoration: none;
+  color: var(--text);
+}
+.top-nav a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- CATEGORIES med SUBGRID ---------- */
+.categories-grid {
+  /* ydre grid – 12 kolonner */
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+  margin-top: 12px;
+}
+
+/* hver kategori-flise bruger subgrid-kolonner
+   og spænder 4/12 kolonner på desktop */
+.category-tile {
+  display: grid;
+  grid-template-columns: subgrid; /* <-- SUBGRID */
+  grid-column: span 4; /* 3 pr. række på desktop */
+  background: var(--tile);
+  color: #fff;
+  text-decoration: none;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- PRODUCT GRID med SUBGRID ---------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+}
+
+.product-card {
+  display: grid;
+  grid-template-columns: subgrid; /* <-- SUBGRID */
+  grid-column: span 4; /* 3 pr. række på desktop */
+  background: #f6f6f6;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 12px;
+}
+.product-card .image-wrap {
+  grid-column: 1 / -1; /* fyld hele subgridden */
+  aspect-ratio: 4 / 3;
+  background: #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.product-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.product-card .meta {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+.product-card .name {
+  margin: 0;
+  font-size: 1rem;
+}
+.product-card .brand,
+.product-card .price {
+  margin: 0;
+}
+.soldout {
+  color: #b00;
+  font-weight: 600;
+}
+
+/* ---------- RESPONSIVE (“mobilesite”) ---------- */
+/* Tablet: 2 kolonner */
+@media (max-width: 900px) {
+  .category-tile {
+    grid-column: span 6;
+  }
+  .product-card {
+    grid-column: span 6;
+  }
+  .site-header {
+    padding: 20px;
+  }
+}
+
+/* Mobil: 1 kolonne, nav under logo */
+@media (max-width: 600px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .top-nav {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .category-tile {
+    grid-column: span 12;
+  }
+  .product-card {
+    grid-column: span 12;
+  }
+}
