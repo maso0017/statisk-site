@@ -6,9 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FashionRUs — Product</title>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+        [data-page="product"] .product-detail-card .price,
+        [data-page="product"] .product-detail-card .price *,
+        [data-page="product"] .product-detail-card .links,
+        [data-page="product"] .product-detail-card .links * {
+            position: static !important;
+            float: none !important;
+            transform: none !important;
+            z-index: auto !important;
+        }
+
+        [data-page="product"] .product-detail-card .price {
+            display: flex !important;
+            align-items: baseline !important;
+            gap: .6rem !important;
+            margin: 8px 0 4px !important;
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+        }
+
+        [data-page="product"] .product-detail-card .price-old {
+            display: inline !important;
+            text-decoration: line-through;
+            opacity: .6;
+            margin-right: .25rem;
+        }
+
+        [data-page="product"] .product-detail-card .links {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        [data-page="product"] .product-detail-card .links a {
+            display: inline-flex !important;
+            height: auto !important;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: var(--tile, #f3f3f3);
+            border: 1px solid #e7e7e7;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
-<body>
+<body data-page="product">
     <header class="site-header">
         <a class="logo" href="index.html">
             <span>Fashion</span><span class="accent">RUs</span>

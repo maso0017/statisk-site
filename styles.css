@@ -1,487 +1,1110 @@
-/* ===== Base ===== */
+/* =======================================================================
+   FashionRUs — STYLES (ren fil)
+   ======================================================================= */
+
+/* ---------- Reset / base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: #fff;
+  line-height: 1.5;
+}
+
+/* Fjern default margins */
+h1,
+h2,
+h3,
+h4,
+p,
+figure {
+  margin: 0 0 0.5rem;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- Theme vars ---------- */
 :root {
   --max: 1200px;
   --gap: 24px;
+
   --text: #222;
   --muted: #666;
-  --tile: #8f8f8f;
-  --tileText: #fff;
-  --border: #e5e7eb;
-  --panel: #f0f0f0;
-  --sale: #ff5533;
+  --tile: #f5f5f7;
+  --panel: #f7f7f9;
+  --border: #e6e8eb;
+
+  --accent: #e53935; /* rød accent */
+  --accent-ink: #fff;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 20px;
 }
-* {
-  box-sizing: border-box;
-}
-html,
-body {
-  margin: 0;
-}
-body {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  color: var(--text);
-}
+
+/* ---------- Layout helpers ---------- */
 .container {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 40px 24px;
+  width: min(100%, var(--max));
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 28px);
+  padding-block: clamp(20px, 4vw, 32px);
 }
+
 h1 {
-  margin: 0 0 24px;
-  font-size: 44px;
+  font-size: clamp(28px, 4.8vw, 44px);
+  line-height: 1.15;
 }
 h2 {
-  margin: 16px 0 12px;
-  font-size: 32px;
+  font-size: clamp(22px, 3.4vw, 28px);
 }
-.muted {
+h3 {
+  font-size: clamp(18px, 2.6vw, 22px);
+}
+small {
   color: var(--muted);
 }
 
-/* ===== Header ===== */
-.site-header {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Links */
+a {
+  color: inherit;
+  text-underline-offset: 2px;
 }
+a:hover {
+  text-decoration: none;
+}
+
+/* ---------- Header / nav ---------- */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: min(100%, var(--max));
+  margin-inline: auto;
+  padding: 18px clamp(16px, 4vw, 28px);
+}
+
 .logo {
   font-weight: 800;
-  font-size: 44px;
-  color: inherit;
+  font-size: clamp(24px, 4vw, 40px);
   text-decoration: none;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
 }
-.logo .r {
-  color: #e52420;
+.logo .accent {
+  color: var(--accent);
 }
-.main-nav {
+
+.top-nav {
   display: flex;
-  gap: 18px;
-}
-.main-nav a {
-  color: #333;
-  text-decoration: none;
-}
-.main-nav a:hover {
-  text-decoration: underline;
-}
-
-/* ===== Footer ===== */
-.site-footer {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 32px 24px;
-  color: var(--muted);
-}
-
-/* ===== Forside / Kategorier ===== */
-.category_list_container {
-  list-style: none;
-  padding: 0;
-  margin: 16px 0 0;
-  display: grid;
+  align-items: center;
   gap: 24px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
-.cat-tile {
-  display: block;
-  background: #9b9b9b;
-  color: var(--tileText);
-  padding: 20px 24px;
-  border-radius: 6px;
-  text-decoration: none;
-}
-.cat-tile:hover {
-  filter: brightness(1.05);
-}
-
-/* ===== Produktliste ===== */
-.product_list_container {
-  list-style: none;
-  padding: 0;
-  margin: 28px 0 0;
-  display: grid;
-  gap: 40px 28px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-
-  /* SUBGRID: definér rækkestruktur som kortene arver */
-  grid-auto-rows: auto auto auto auto auto; /* media | title | meta | price | cta */
-}
-.product-card {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 5;
-}
-.product-link {
-  color: inherit;
-  text-decoration: none;
-  display: contents;
-}
-
-.product-media {
-  grid-row: 1;
-  position: relative;
-  border: 1px solid var(--border);
-  aspect-ratio: 4/3;
-  background: #fff;
-  display: grid;
-  place-items: center;
-}
-.product-media img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-.badge {
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: #2f2f2f;
-  color: #fff;
-  padding: 6px 10px;
-  font-size: 12px;
-}
-.badge.sale {
-  left: auto;
-  right: 0;
-  background: var(--sale);
-}
-.soldout {
-  background: #2f2f2f;
-}
-
-.product-title {
-  grid-row: 2;
-  margin: 10px 0 0;
-  font-size: 18px;
-  font-weight: 700;
-}
-.product-meta {
-  grid-row: 3;
+.top-nav a {
   color: var(--muted);
-  font-size: 13px;
+  text-decoration: none;
+  font-weight: 600;
 }
-.price {
-  grid-row: 4;
+.top-nav a:hover {
+  color: var(--text);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  width: min(100%, var(--max));
+  margin-inline: auto;
+  padding: 28px clamp(16px, 4vw, 28px);
+  border-top: 1px solid var(--border);
+}
+
+/* =======================================================================
+   Forside — Kategorier (index.html)
+   ======================================================================= */
+
+.categories-grid {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  margin-top: clamp(10px, 2vw, 16px);
+}
+
+.category-title,
+.categories-grid a {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  padding: 16px 22px;
+  border-radius: var(--radius-l);
+  background: #8a8c8f; /* base baggrund – mørk grå som dine screenshots */
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+
+/* Hvis du vil have lys tiles i stedet, skift farver:
+   background: var(--tile); color: inherit; */
+
+/* =======================================================================
+   Produktliste (productlist.html)
+   ======================================================================= */
+
+/* Filter chips */
+#filters {
+  display: grid;
+  gap: 14px 18px;
+  margin-block: 12px 22px;
+}
+.chipset {
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
+}
+.chipset .chip-label {
+  color: var(--muted);
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+button.chip {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--tile);
+  color: inherit;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  font: inherit;
+  transition: 0.15s ease;
+}
+button.chip:hover {
+  transform: translateY(-1px);
+}
+button.chip.is-active {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+}
+
+/* Grid med produkter — støtter både .product-grid og #productList.product_list_container */
+.product-grid,
+#productList.product_list_container {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* Kort */
+.product-card {
+  background: #fff;
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.product-link {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+}
+
+.product-media {
+  position: relative;
+  background: var(--tile);
+}
+.product-media img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+/* Badges (overlapper ikke) */
+.product-media .badge {
+  position: absolute;
+  top: 12px;
+  z-index: 2;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+.product-media .badge.sale {
+  left: 12px;
+  background: #ff6b5d;
+}
+.product-media .badge.soldout {
+  right: 12px;
+  background: #111;
+}
+
+/* Content i kortet */
+.product-card h3.product-title {
+  font-size: 18px;
+  line-height: 1.3;
+  margin: 10px 0 4px;
+}
+
+.product-card .meta {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.product-card .card-body {
+  padding: 14px 16px 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.price {
+  font-weight: 800;
 }
 .price-old {
   color: var(--muted);
   text-decoration: line-through;
-}
-.cta {
-  grid-row: 5;
-  margin-top: 6px;
-  color: #0b57d0;
-  font-size: 14px;
-  text-decoration: underline;
+  margin-right: 6px;
 }
 
-/* states */
-.udsolgt .product-media img {
-  opacity: 0.35;
-  filter: grayscale(1);
-}
-.nedsat .price-old {
-  display: inline;
-}
-
-/* ===== Produktdetalje ===== */
-.breadcrumbs {
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 18px;
-}
-.breadcrumbs a {
-  color: inherit;
-  text-decoration: none;
-}
-.breadcrumbs a:hover {
-  text-decoration: underline;
-}
+/* =======================================================================
+   Produkt-side (product.html)
+   ======================================================================= */
 
 .product-detail {
-  display: grid;
-  gap: 32px;
-  grid-template-columns: 1.1fr 1fr 340px; /* billede | info | sidebar */
-  align-items: start;
-}
-.gallery {
-  display: grid;
-  gap: 12px;
-}
-.media-main {
-  border: 1px solid var(--border);
-  background: #fff;
-  padding: 16px;
-}
-.media-main img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-.thumbs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-.thumbs img {
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border: 1px solid var(--border);
+  /* wrapper, hvis du vil style selve sektionen */
 }
 
-.detail-info {
+.product-detail-card {
   display: grid;
+  grid-template-columns: minmax(260px, 440px) 1fr;
+  gap: clamp(16px, 2vw, 32px);
+  align-items: start;
+}
+
+.product-detail-card .media {
+  border-radius: var(--radius-m);
+  background: var(--tile);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.product-detail-card .media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.product-detail-card .info {
+  display: grid;
+  gap: 12px 0;
+  grid-template-rows: auto auto auto auto 1fr auto;
+}
+
+.product-detail-card .title {
+  font-size: clamp(26px, 3.6vw, 44px);
+  line-height: 1.15;
+  word-break: normal;
+  hyphens: auto;
+}
+
+.product-detail-card .brand,
+.product-detail-card .meta-line {
+  color: var(--muted);
+}
+
+.product-detail-card .meta-line {
+  display: flex;
   gap: 16px;
+  flex-wrap: wrap;
 }
-.specs {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 6px 18px;
-  margin: 0;
+
+.product-detail-card .price {
+  font-size: clamp(18px, 2.2vw, 24px);
 }
-.specs dt {
-  font-weight: 700;
+
+.product-detail-card .desc {
+  padding: 16px;
+  background: var(--panel);
+  border-radius: var(--radius-m);
+  line-height: 1.55;
 }
-.brand-head {
-  font-size: 36px;
+
+.product-detail-card .links {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+.product-detail-card .links a {
+  text-decoration: none;
+  background: var(--tile);
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: inherit;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* Subgrid der falder pænt tilbage */
+@supports (grid-template-rows: subgrid) {
+  .product-detail-card {
+    grid-template-rows: auto;
+  }
+  .product-detail-card .info {
+    grid-template-rows: subgrid;
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .product-detail-card {
+    grid-template-columns: 1fr;
+  }
+  .product-detail-card .media {
+    order: -1;
+  }
+  .product-detail-card .title {
+    font-size: clamp(22px, 6vw, 32px);
+  }
+}
+
+/* =======================================================================
+   Små utils
+   ======================================================================= */
+.badge {
+  user-select: none;
+}
+.backlink {
+  text-decoration: none;
+}
+.error {
+  padding: 12px 14px;
+  background: #ffe8e6;
+  border: 1px solid #ffd0cc;
+  color: #b3312e;
+  border-radius: 10px;
+}
+/* --- Fix: product detail links should not stretch --- */
+.product-detail-card .links {
+  display: flex;
+  gap: 12px;
+  align-items: center; /* <-- prevents vertical stretch */
+  flex-wrap: wrap; /* <-- wraps on smaller screens */
   margin-top: 10px;
 }
 
-.sidebar {
-  background: var(--panel);
-  padding: 24px;
-  border-radius: 6px;
-  display: grid;
-  gap: 14px;
-}
-.pname {
-  margin: 0;
-  font-size: 28px;
-  line-height: 1.15;
-}
-.size-label {
-  display: grid;
-  gap: 6px;
-  font-size: 14px;
-}
-select {
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: #fff;
-}
-.btn.primary {
-  padding: 12px 14px;
-  border: 0;
-  border-radius: 6px;
-  background: #111;
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-}
-.btn.primary:hover {
-  filter: brightness(1.05);
+.product-detail-card .links a {
+  display: inline-flex; /* <-- keeps link height to content */
+  align-items: center;
+  height: auto !important; /* <-- defensive: cancel any computed stretch */
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--tile);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-/* ===== Responsiv ===== */
-@media (max-width: 980px) {
-  .product-detail {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .sidebar {
-    order: 3;
-  }
+/* optional: ensure the right column doesn't try to fill space oddly */
+.product-detail-card .info {
+  align-content: start; /* <-- keeps blocks compact */
 }
-.product-media {
+/* =========================
+   PRODUCT DETAIL – CLEAN LAYOUT
+   ========================= */
+.product-detail {
+  padding-top: 8px;
+}
+
+.product-detail-card {
+  display: grid;
+  grid-template-columns: clamp(240px, 35vw, 560px) 1fr; /* img | info */
+  gap: clamp(16px, 3vw, 40px);
+  align-items: start;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  padding: clamp(16px, 2vw, 28px);
+}
+
+/* media (image) */
+.product-detail-card .media {
   position: relative;
 }
-
-.udsolgt .product-media::before {
-  content: "Sold Out";
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background: #333;
-  color: #fff;
-  font-size: 14px;
-  padding: 4px 8px;
-  border-radius: 3px;
-}
-/* === Dynamiske kategorier === */
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin-top: 12px;
-}
-
-.categories-grid a,               /* rammer uanset klasse */
-.categories-grid .category-tile,  /* hvis JS sætter denne */
-.categories-grid .category-button /* hvis du brugte den gamle klasse */ {
+.product-detail-card .media img {
   display: block;
-  background: #8d8d8d;
-  color: #fff;
-  text-decoration: none;
-  padding: 16px 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  height: auto; /* never stretch */
+  object-fit: cover;
+  border-radius: 14px;
 }
 
-.categories-grid a:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
+/* info column */
+.product-detail-card .info {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  max-width: 70ch; /* readable measure */
 }
-.top-nav a {
-  margin-left: 16px;
-  text-decoration: none;
+
+.product-detail-card .title {
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.15;
+  margin: 0 0 4px;
+  word-break: break-word; /* prevent tall stacking */
+}
+
+.product-detail-card .meta-line {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: var(--muted);
+}
+
+.product-detail-card .price {
+  font-size: clamp(18px, 2vw, 22px);
+  margin-top: 6px;
+}
+
+.product-detail-card .desc {
+  margin-top: 12px;
   color: #222;
 }
-.top-nav a:hover {
-  text-decoration: underline;
-}
-:root {
-  --gap: 16px;
-  --tile: #8d8d8d;
-  --text: #222;
+.product-detail-card .desc p {
+  margin: 0 0 10px;
 }
 
-/* Header + logo */
-.site-header {
+/* back/“alle produkter” chips */
+.product-detail-card .links {
+  margin-top: 16px;
   display: flex;
+  flex-wrap: wrap; /* wrap neatly on smaller widths */
+  align-items: flex-start; /* <- key: no vertical stretch */
+  gap: 10px;
+}
+.product-detail-card .links a {
+  display: inline-flex; /* compact chip */
   align-items: center;
-  justify-content: space-between;
-  gap: var(--gap);
-  padding: 24px;
+  height: auto !important; /* defensive */
+  line-height: 1.1;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--tile);
+  border: 1px solid #e7e7e7;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
-.logo {
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 800;
-  color: var(--text);
-  text-decoration: none; /* ingen understregning */
+.product-detail-card .links a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
-.logo .accent {
-  color: #d22;
+
+/* badges (ensure no overlap with each other or content) */
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
 }
-.top-nav {
+.badge.soldout {
+  left: auto;
+  right: 12px;
+}
+
+/* ------- Responsive ------- */
+@media (max-width: 980px) {
+  .product-detail-card {
+    grid-template-columns: 1fr; /* stack */
+  }
+  .product-detail-card .info {
+    max-width: 80ch;
+  }
+}
+
+@media (max-width: 520px) {
+  .product-detail-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+  .product-detail-card .title {
+    font-size: 26px;
+  }
+  .product-detail-card .links a {
+    padding: 7px 10px;
+    border-radius: 9px;
+  }
+}
+/* =========================
+   PRODUKTDETALJE – RENT LAYOUT
+   ========================= */
+.product-detail {
+  padding-top: 8px;
+}
+
+.product-detail-card {
+  display: grid;
+  grid-template-columns: clamp(260px, 36vw, 560px) 1fr; /* billede | info */
+  gap: clamp(16px, 3vw, 40px);
+  align-items: start;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  padding: clamp(16px, 2vw, 28px);
+}
+
+.product-detail-card .media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.product-detail-card .info {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  max-width: 75ch;
+}
+
+.product-detail-card .title {
+  margin: 0 0 4px;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.15;
+  word-break: normal; /* ingen bogstav-stabling */
+  overflow-wrap: anywhere;
+}
+
+.product-detail-card .meta-line {
+  color: var(--muted, #666);
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
 }
-.top-nav a {
-  text-decoration: none;
-  color: var(--text);
+
+.product-detail-card .price {
+  margin-top: 6px;
+  font-size: clamp(18px, 2vw, 22px);
 }
-.top-nav a:hover {
-  text-decoration: underline;
+.price-old {
+  text-decoration: line-through;
+  opacity: 0.6;
+  margin-right: 8px;
 }
 
-/* ---------- CATEGORIES med SUBGRID ---------- */
-.categories-grid {
-  /* ydre grid – 12 kolonner */
+/* beskrivelse – p-afsnit med god luft */
+.product-detail-card .desc {
+  margin-top: 10px;
+}
+.product-detail-card .desc p {
+  margin: 0 0 10px;
+}
+
+/* links (tilbage/alle) – chips som ikke strækker sig */
+.product-detail-card .links {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start; /* <— vigtigt: ingen vertical stretch */
+  gap: 10px;
+}
+.product-detail-card .links a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--tile, #f3f3f3);
+  border: 1px solid #e7e7e7;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.product-detail-card .links a:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* badges (hvis du viser dem på detaljeside) */
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+.badge.soldout {
+  left: auto;
+  right: 12px;
+}
+
+/* Responsiv stacking */
+@media (max-width: 980px) {
+  .product-detail-card {
+    grid-template-columns: 1fr;
+  }
+  .product-detail-card .info {
+    max-width: 85ch;
+  }
+}
+@media (max-width: 520px) {
+  .product-detail-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+  .product-detail-card .title {
+    font-size: 26px;
+  }
+  .product-detail-card .links a {
+    padding: 7px 10px;
+    border-radius: 9px;
+  }
+}
+/* =============================
+   FIX til produkt-detalje side
+   (overstyrer gamle kort-styles)
+   ============================= */
+
+/* Layout-orden: titel → meta → pris → beskrivelse → links */
+.product-detail-card .info {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: var(--gap);
+  grid-auto-rows: min-content;
+  gap: 12px;
+}
+
+/* PRIS – må IKKE være absolut som på kort */
+.product-detail-card .price {
+  position: static !important;
+  float: none !important;
+  display: block !important;
+  margin: 6px 0 2px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  z-index: auto !important;
+}
+
+/* LINKS – chips må ikke strække/overlappe */
+.product-detail-card .links {
+  order: 30; /* under beskrivelsen */
+  position: static !important;
+  display: flex !important;
+  align-items: flex-start !important; /* ingen stretch i højden */
+  gap: 10px;
+  margin-top: 8px;
+  z-index: auto !important;
+}
+.product-detail-card .links a {
+  position: static !important;
+  float: none !important;
+  background: var(--tile, #f3f3f3);
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+/* BESKRIVELSE – står før links */
+.product-detail-card .desc {
+  order: 20;
+}
+
+/* For en sikkerheds skyld: intet i .info må være absolut placeret */
+.product-detail-card .info > * {
+  position: static !important;
+  max-width: 100%;
+}
+
+/* Fjern evt. badge-positioner fra kort, hvis de skulle lække */
+.product-detail-card .badge {
+  position: static !important;
+  margin-bottom: 6px;
+}
+/* =========================================================
+   PRODUKTDETALJE – hård nulstilling af arvede kort-styles
+   Så intet bliver absolut placeret eller overlapper
+   ========================================================= */
+
+/* Nulstil alle "arvede" absolut/fixed placeringer i pris + links */
+.product-detail-card .price,
+.product-detail-card .price *,
+.product-detail-card .links,
+.product-detail-card .links *,
+.product-detail-card .badge,
+.product-detail-card .badge * {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+  float: none !important;
+  z-index: auto !important;
+}
+
+.product-detail-card .price {
+  display: flex !important;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 6px 0 2px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.product-detail-card .price-old {
+  color: #888;
+  opacity: 0.85;
+  text-decoration: line-through;
+  font-weight: 400;
+}
+.product-detail-card .price strong {
+  font-weight: 700;
+}
+
+/* Links (Tilbage / Alle produkter) under teksten – uden stretch/overlap */
+.product-detail-card .links {
+  order: 30;
+  display: flex !important;
+  align-items: center !important; /* ingen stræk i højden */
+  gap: 10px;
   margin-top: 12px;
 }
+.product-detail-card .links a {
+  position: static !important;
+  float: none !important;
+  background: var(--tile, #f3f3f3);
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+/* === FINAL PATCH: product detail – stop stretch/overlap === */
 
-/* hver kategori-flise bruger subgrid-kolonner
-   og spænder 4/12 kolonner på desktop */
-.category-tile {
+/* Rækkerne i info-kolonnen skal kun være så høje som deres indhold */
+.product-detail-card .info {
   display: grid;
-  grid-template-columns: subgrid; /* <-- SUBGRID */
-  grid-column: span 4; /* 3 pr. række på desktop */
-  background: var(--tile);
-  color: #fff;
-  text-decoration: none;
-  padding: 16px 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  grid-auto-rows: max-content; /* rækker = indholdshøjde */
+  align-content: start; /* hold hele blokken kompakt */
 }
 
-/* ---------- PRODUCT GRID med SUBGRID ---------- */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: var(--gap);
+/* Ingen af børnene i .info må strække i højden */
+.product-detail-card .info > * {
+  align-self: start !important;
+  justify-self: start;
 }
 
-.product-card {
+/* Links-chips: lad dem tage naturlig højde/bredde */
+.product-detail-card .links {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap;
+  gap: 10px;
+  height: auto !important;
+  min-height: 0 !important;
+  margin-top: 12px !important;
+  z-index: auto !important;
+}
+.product-detail-card .links a {
+  display: inline-flex !important;
+  height: auto !important;
+}
+
+/* Pris må aldrig være absolut/arvet fra kort */
+.product-detail-card .price,
+.product-detail-card .price * {
+  position: static !important;
+  float: none !important;
+  transform: none !important;
+}
+
+/* Gammel gennemstreg-pris: pæn på linje */
+.product-detail-card .price {
+  display: flex !important;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 6px 0 2px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.product-detail-card .price-old {
+  text-decoration: line-through;
+  color: #888;
+  opacity: 0.85;
+}
+/* ========================================================/* =========================================
+   PRODUCT: stop overlap/rod i tekstkolonnen
+   Gælder kun på product.html
+   ========================================= */
+body[data-page="product"] .product-detail-card .info {
   display: grid;
-  grid-template-columns: subgrid; /* <-- SUBGRID */
-  grid-column: span 4; /* 3 pr. række på desktop */
-  background: #f6f6f6;
-  border-radius: 12px;
+  gap: 12px; /* fast mellemrum mellem sektioner */
+  align-content: start;
+}
+
+/* NULSTIL alle “arvede” positioner i højre kolonne */
+body[data-page="product"] .product-detail-card .info,
+body[data-page="product"] .product-detail-card .info * {
+  position: static !important;
+  float: none !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+  z-index: auto !important;
+  white-space: normal !important;
+}
+
+/* Giv normal luft mellem afsnit/linjer */
+body[data-page="product"] .product-detail-card .info p {
+  margin: 0 0 12px !important;
+  line-height: 1.5 !important;
+}
+
+/* Titel + meta-linjer */
+body[data-page="product"] .product-detail-card .title {
+  margin: 0 0 8px !important;
+}
+body[data-page="product"] .product-detail-card .meta-line,
+body[data-page="product"] .product-detail-card .brand {
+  display: block !important;
+  color: var(--muted, #666);
+}
+
+/* Pris: vis den helt normalt på linje */
+body[data-page="product"] .product-detail-card .info .price {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 0.6rem !important;
+  margin: 6px 0 2px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+body[data-page="product"] .product-detail-card .info .price .price-old {
+  text-decoration: line-through !important;
+  opacity: 0.65 !important;
+}
+
+/* Beskrivelse */
+body[data-page="product"] .product-detail-card .desc p {
+  margin: 0 0 10px !important;
+}
+
+/* Links (Tilbage / Alle produkter): chips uden stretch/overlap */
+body[data-page="product"] .product-detail-card .info .links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 8px !important;
+}
+body[data-page="product"] .product-detail-card .info .links a {
+  display: inline-flex !important;
+  padding: 8px 12px !important;
+  height: auto !important;
+  border-radius: 10px !important;
+  background: var(--tile, #f3f3f3) !important;
+  border: 1px solid #e7e7e7 !important;
+  text-decoration: none !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
+}
+/* =========================================================
+   PRODUCT PAGE — Subgrid layout + anti-overlap
+   (gælder kun på product.html)
+   ========================================================= */
+body[data-page="product"] .product-detail {
+  padding-top: 8px;
+}
+
+/* GRID: billede | tekst */
+body[data-page="product"] .product-detail-card {
+  display: grid;
+  grid-template-columns: clamp(260px, 36vw, 560px) 1fr;
+  /* rækker defineres nedefor (med/uden subgrid) */
+  gap: clamp(16px, 3vw, 40px);
+  align-items: start;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  padding: clamp(16px, 2vw, 28px);
+}
+
+/* Billede fylder venstre kolonne og alle rækker */
+body[data-page="product"] .product-detail-card .media {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  background: #f5f5f7;
+  border-radius: 14px;
   overflow: hidden;
-  padding: 12px;
 }
-.product-card .image-wrap {
-  grid-column: 1 / -1; /* fyld hele subgridden */
-  aspect-ratio: 4 / 3;
-  background: #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.product-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+body[data-page="product"] .product-detail-card .media img {
   display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/4;
+  object-fit: cover;
 }
-.product-card .meta {
+
+/* -------- Subgrid opsætning -------- */
+/* Fallback (hvis subgrid ikke findes): “normal” grid i højre kolonne */
+body[data-page="product"] .product-detail-card .info {
+  grid-column: 2;
   display: grid;
-  gap: 6px;
-  margin-top: 8px;
-}
-.product-card .name {
-  margin: 0;
-  font-size: 1rem;
-}
-.product-card .brand,
-.product-card .price {
-  margin: 0;
-}
-.soldout {
-  color: #b00;
-  font-weight: 600;
+  /* samme rækkedefinition som subgrid-versionen for at matche layoutet */
+  grid-template-rows: auto auto auto auto 1fr auto;
+  gap: 12px;
+  align-content: start;
+  max-width: 75ch; /* læsevenlig linjelængde */
 }
 
-/* ---------- RESPONSIVE (“mobilesite”) ---------- */
-/* Tablet: 2 kolonner */
-@media (max-width: 900px) {
-  .category-tile {
-    grid-column: span 6;
+/* Subgrid: lad .info arve rækkerne fra parent */
+@supports (grid-template-rows: subgrid) {
+  body[data-page="product"] .product-detail-card {
+    /* 6 faste rækker i parent */
+    grid-template-rows: auto auto auto auto 1fr auto;
   }
-  .product-card {
-    grid-column: span 6;
-  }
-  .site-header {
-    padding: 20px;
-  }
-}
-
-/* Mobil: 1 kolonne, nav under logo */
-@media (max-width: 600px) {
-  .site-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .top-nav {
-    flex-wrap: wrap;
+  body[data-page="product"] .product-detail-card .info {
+    display: grid;
+    grid-row: 1 / -1; /* stræk over alle parent-rækker */
+    grid-template-rows: subgrid; /* arver 6 rækker fra parent */
     gap: 12px;
+    align-content: start;
   }
-  .category-tile {
-    grid-column: span 12;
+  /* Eksplicit rækketildeling (ingen overlap) */
+  body[data-page="product"] .product-detail-card .title {
+    grid-row: 1;
   }
-  .product-card {
-    grid-column: span 12;
+  body[data-page="product"] .product-detail-card .brand {
+    grid-row: 2;
+  }
+  body[data-page="product"] .product-detail-card .meta-line {
+    grid-row: 3;
+  }
+  body[data-page="product"] .product-detail-card .price {
+    grid-row: 4;
+  }
+  body[data-page="product"] .product-detail-card .desc {
+    grid-row: 5;
+  }
+  body[data-page="product"] .product-detail-card .links {
+    grid-row: 6;
+  }
+}
+
+/* -------- Anti-overlap / nulstil arvet kort-placering -------- */
+body[data-page="product"] .product-detail-card .info > *,
+body[data-page="product"] .product-detail-card .price,
+body[data-page="product"] .product-detail-card .price *,
+body[data-page="product"] .product-detail-card .links,
+body[data-page="product"] .product-detail-card .links * {
+  position: static !important;
+  float: none !important;
+  inset: auto !important;
+  transform: none !important;
+  z-index: auto !important;
+  white-space: normal !important;
+}
+
+/* Typografi/afstande */
+body[data-page="product"] .product-detail-card .title {
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.15;
+  margin: 0;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+body[data-page="product"] .product-detail-card .brand,
+body[data-page="product"] .product-detail-card .meta-line {
+  color: #666;
+}
+body[data-page="product"] .product-detail-card .meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Pris: gammel + ny på linje */
+body[data-page="product"] .product-detail-card .price {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 0.6rem !important;
+  margin: 6px 0 2px !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+body[data-page="product"] .product-detail-card .price-old {
+  text-decoration: line-through !important;
+  opacity: 0.65 !important;
+}
+
+/* Beskrivelse: p-afsnit med luft */
+body[data-page="product"] .product-detail-card .desc p {
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+/* Links (Tilbage / Alle produkter): chips med wrap, aldrig stræk */
+body[data-page="product"] .product-detail-card .links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 8px !important;
+}
+body[data-page="product"] .product-detail-card .links a {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 8px 12px !important;
+  border-radius: 10px !important;
+  background: #f3f3f3 !important;
+  border: 1px solid #e7e7e7 !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
+  text-decoration: none !important;
+}
+
+/* Responsiv stacking */
+@media (max-width: 980px) {
+  body[data-page="product"] .product-detail-card {
+    grid-template-columns: 1fr;
+  }
+  body[data-page="product"] .product-detail-card .media {
+    grid-column: 1;
+    grid-row: 1;
+    border-radius: 14px;
+  }
+  @supports (grid-template-rows: subgrid) {
+    body[data-page="product"] .product-detail-card {
+      grid-template-rows: auto auto auto auto 1fr auto; /* samme 6 rækker */
+    }
+    body[data-page="product"] .product-detail-card .info {
+      grid-row: 2 / -1; /* info under billedet */
+      grid-template-rows: subgrid;
+    }
   }
 }

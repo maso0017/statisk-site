@@ -1,75 +1,162 @@
-const API = "https://kea-alt-del.dk/t7/api";
+/* ---------- Konfiguration ---------- */
+const API = "https://kea-alt-del.dk/t7/api/products?limit=200";
+const IMG = (id) => `https://kea-alt-del.dk/t7/images/webp/640/${id}.webp`;
 
-(async function loadProducts() {
-  const listEl = document.getElementById("productlist");
-  const titleEl = document.getElementById("listTitle");
-  if (!listEl) return;
+/* ---------- DOM ---------- */
+const $filters = document.querySelector("#filters");
+const $list = document.querySelector("#productlist") || document.querySelector("#productList");
+const $title = document.querySelector("#listTitle") || document.querySelector("h1");
 
-  const params = new URLSearchParams(location.search);
-  const category = params.get("category"); // krav: filter på valgt kategori
-  const season = params.get("season"); // valgfrit – hvis du bruger den i menuen
+/* ---------- URL / State ---------- */
+const url = new URL(location.href);
+const qs = url.searchParams;
 
-  // Byg API-url ud fra URL-parametre
-  const url = new URL(`${API}/products/`);
-  if (category) url.searchParams.set("category", category);
-  if (season && season !== "all") url.searchParams.set("season", season);
+let ALL = [];
+const state = {
+  gender: qs.get("gender") || "all",
+  brand: qs.get("brand") || "all",
+  season: qs.get("season") || "all",
+  category: qs.get("category") || "all", // kategori fra forsiden
+};
 
-  // Titel
-  titleEl.textContent = category ? `Products – ${toTitle(category)}` : "Products";
+/* ---------- Utils ---------- */
+const uniq = (arr) => [...new Set(arr.filter(Boolean))].sort();
+const kr = (n) => (typeof n === "number" ? new Intl.NumberFormat("da-DK", { style: "currency", currency: "DKK", maximumFractionDigits: 0 }).format(n) : n);
 
-  listEl.innerHTML = "<p>Henter produkter…</p>";
+const escapeHtml = (s = "") => String(s).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
+function getProp(p, type) {
+  if (type === "brand") return p.brandname || p.brand;
+  return p[type];
+}
+
+function match(p, type) {
+  const f = state[type];
+  if (!f || f === "all") return true;
+  return getProp(p, type) === f;
+}
+
+function applyFilters() {
+  return ALL.filter((p) => match(p, "gender") && match(p, "brand") && match(p, "season") && match(p, "category"));
+}
+
+function setURLFromState() {
+  const url = new URL(location.href);
+  const qs = url.searchParams;
+
+  Object.entries(state).forEach(([k, v]) => {
+    if (!v || v === "all") qs.delete(k);
+    else qs.set(k, v);
+  });
+
+  history.replaceState({}, "", url);
+}
+
+/* ---------- Render kort ---------- */
+function card(p) {
+  const price = p.price ?? p.mrp ?? p.list_price ?? 0;
+  const hasDiscount = p.discount && Number(p.discount) > 0;
+  const newPrice = hasDiscount ? Math.round(price * (1 - p.discount / 100)) : null;
+
+  return `
+    <li class="product-card ${p.soldout ? "is-soldout" : ""}">
+      <a class="product-link" href="product.html?id=${p.id}">
+        <div class="product-media" style="position:relative">
+          ${p.soldout ? `<span class="badge soldout">Sold out</span>` : ""}
+          ${hasDiscount ? `<span class="badge sale">Sale</span>` : ""}
+          <img src="${IMG(p.id)}" alt="${escapeHtml(p.productdisplayname || p.name || "Produkt")}" loading="lazy">
+        </div>
+
+        <h3 class="product-title">${escapeHtml(p.productdisplayname || p.name || "Uden navn")}</h3>
+        <p class="product-meta">${escapeHtml(p.brandname || p.brand)} · ${escapeHtml(p.category || "")}</p>
+
+        <div class="price">
+          ${hasDiscount ? `<span class="price-old">${kr(price)}</span><strong>${kr(newPrice)}</strong>` : `<strong>${kr(price)}</strong>`}
+        </div>
+      </a>
+    </li>
+  `;
+}
+
+function render(list) {
+  if (!$list) return;
+  if (!Array.isArray(list) || list.length === 0) {
+    $list.innerHTML = `<li class="muted">Ingen produkter matcher filtrene.</li>`;
+    return;
+  }
+  $list.innerHTML = list.map(card).join("");
+}
+
+/* ---------- Filter UI ---------- */
+function chipsetHTML(type, label, values) {
+  const chips = values
+    .map(
+      (v) => `
+      <button class="chip ${state[type] === v ? "is-active" : ""}" data-type="${type}" data-value="${escapeHtml(v)}">
+        ${escapeHtml(v)}
+      </button>`
+    )
+    .join("");
+
+  return `
+    <div class="chipset" data-type="${type}">
+      <span class="chip-label">${label}:</span>
+      <button class="chip ${state[type] === "all" ? "is-active" : ""}" data-type="${type}" data-value="all">All</button>
+      ${chips}
+    </div>
+  `;
+}
+
+function buildFilters(data) {
+  if (!$filters) return;
+
+  const genders = uniq(data.map((p) => getProp(p, "gender")));
+  const brands = uniq(data.map((p) => getProp(p, "brand")));
+  const seasons = uniq(data.map((p) => getProp(p, "season")));
+  const categories = uniq(data.map((p) => getProp(p, "category")));
+
+  $filters.innerHTML = chipsetHTML("gender", "Gender", genders) + chipsetHTML("brand", "Brand", brands) + chipsetHTML("season", "Season", seasons) + chipsetHTML("category", "Category", categories);
+
+  // klik på chips
+  $filters.addEventListener("click", (e) => {
+    const btn = e.target.closest("button.chip");
+    if (!btn) return;
+
+    const { type, value } = btn.dataset;
+    state[type] = value;
+
+    // Vis aktiv tilstand pr. chipset
+    $filters.querySelectorAll(`.chipset[data-type="${type}"] .chip`).forEach((b) => b.classList.toggle("is-active", b === btn));
+
+    setURLFromState();
+    render(applyFilters());
+  });
+
+  // initial aktiv tilstand fra state
+  ["gender", "brand", "season", "category"].forEach((type) => {
+    $filters.querySelectorAll(`.chipset[data-type="${type}"] .chip`).forEach((b) => b.classList.toggle("is-active", b.dataset.value === state[type]));
+  });
+}
+
+/* ---------- Init ---------- */
+(async function init() {
   try {
-    const res = await fetch(url);
-    const products = await res.json();
-
-    if (!Array.isArray(products) || products.length === 0) {
-      listEl.innerHTML = "<p>Ingen produkter fundet.</p>";
-      return;
+    // Titel (fx “Products — Footwear”)
+    if ($title) {
+      $title.textContent = "Products" + (state.category !== "all" ? ` — ${state.category}` : "");
     }
 
-    listEl.innerHTML = "";
-    const frag = document.createDocumentFragment();
+    // Hent produkter
+    const res = await fetch(API, { cache: "no-store" });
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+    ALL = await res.json();
 
-    products.forEach((p) => {
-      const art = document.createElement("article");
-      art.className = "product-card";
-
-      const imgSrc = p.id ? `https://kea-alt-del.dk/t7/images/webp/640/${p.id}.webp` : "";
-
-      art.innerHTML = `
-        <a class="image-wrap" href="product.html?id=${p.id}">
-          <img loading="lazy" src="${imgSrc}" alt="${escapeHtml(p.productdisplayname || "")}" />
-        </a>
-        <div class="meta">
-          <h3 class="name">
-            <a href="product.html?id=${p.id}">${escapeHtml(p.productdisplayname || "Product")}</a>
-          </h3>
-          <p class="brand">${escapeHtml(p.brandname || "")}</p>
-          <p class="price">${formatPrice(p.price)} kr</p>
-          ${p.soldout ? "<p class='soldout'>Sold out</p>" : ""}
-        </div>
-      `;
-      frag.appendChild(art);
-    });
-
-    listEl.appendChild(frag);
+    buildFilters(ALL);
+    render(applyFilters());
   } catch (err) {
     console.error(err);
-    listEl.innerHTML = "<p class='error'>Kunne ikke hente produkter.</p>";
+    if ($list) {
+      $list.innerHTML = `<li class="error-box">FEJL: ${escapeHtml(err.message || "Kunne ikke hente data")}</li>`;
+    }
   }
 })();
-
-function toTitle(str = "") {
-  return String(str)
-    .replace(/[-_]/g, " ")
-    .replace(/\b\w/g, (m) => m.toUpperCase());
-}
-function escapeHtml(str = "") {
-  return String(str).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
-}
-function formatPrice(val) {
-  const n = Number(val);
-  if (Number.isNaN(n)) return "—";
-  return n.toFixed(2).replace(".", ",");
-}
